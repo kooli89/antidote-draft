@@ -1,19 +1,5 @@
 -module(scriptLoop).
--export([send/6, recv/1, run/0, runRecv/0]).
-
-
-send(0,_,_,_,_,_) -> 
-    [];
-
-
-send (N, Term, Key, Conflicts, NodeId, Socket) when N > 0 ->
-    Data = java:call_static(NodeId, 'com.google.protobuf.ByteString', copyFrom, [lists:flatten(io_lib:format("~p", [N]))]),
-    SentSet = java:call_static(NodeId,'org.imdea.vcd.Generator', messageSet,[Key, Conflicts, Data]),
-    SentBytes = java:call(java:call(java:call(java:call(SentSet,getMessagesList,[]),get,[0]),getData,[]),toByteArray,[]),
-    io:format("sending ~p~n",[java:array_to_list(SentBytes)]),
-    java:call(Socket,send,[SentSet]),
-    timer:sleep(2000),
-    [Term|send(N-1,Term, Key, Conflicts, NodeId, Socket)]. 
+-export([runSend/0, runRecv/0]).
 
 
 recv(Socket) ->
@@ -54,7 +40,7 @@ runRecv() ->
     recv(Socket).
 
 
-run() ->
+runSend() ->
     application:ensure_started(java_erlang),
     {ok,NodeId} = java:start_node([{add_to_java_classpath,["vcd.jar"]}]),
     Conf = java:call_static(NodeId,'org.imdea.vcd.Config',parseArgs,[""]),
