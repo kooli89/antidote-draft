@@ -6,6 +6,8 @@ recv(Socket) ->
     RcvSet = java:call(Socket,'receive',[]),
     RcvBytes = java:call(java:call(java:call(java:call(RcvSet,getMessagesList,[]),get,[0]),getData,[]),toByteArray,[]),
     io:format("received ~p~n",[java:array_to_list(RcvBytes)]),
+    Status = java:call(RcvSet, getStatusValue, []),
+    io:format("received status ~p~n",[Status]),
     timer:sleep(1000),
     recv(Socket).
 
