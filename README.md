@@ -14,12 +14,18 @@ $ ./localTesting.sh
 3. In terminal 2, run an infinite receiving loop
 ```
 $ erl -sname loopRcv
-> c(scriptLoop).
-> scriptLoop:runRecv().
+> c(connector).
+> connector:runRecv().
 ```
 4. In terminal 3, send messages
 ```
 $ erl -sname loopSend
-> c(scriptLoop).
-> scriptLoop:runSend().
+> c(connector).
+> connector:runSend().
+```
+### Tests
+```
+$ erl -sname tests
+> c(test).
+> test:test().
 ```
