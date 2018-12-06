@@ -1,5 +1,5 @@
--module(s).
--export([init/0, runSend/0, runRecv/0, recvOneMsg/1,consumeLocally/3]).
+-module(connector).
+-export([init/0, runSend/0, runRecv/0, recvOneMsg/1,send/3]).
 
 init() ->
     application:ensure_started(java_erlang),
@@ -12,11 +12,15 @@ init() ->
 
 recvOneMsg(Socket) ->
     RcvSet = java:call(Socket,'receive',[]),
-    RcvBytes = java:call(java:call(RcvSet,getMessagesList,[]),get,[0]),
+    RcvMsg = java:call(java:call(RcvSet,getMessagesList,[]),get,[0]),
     % io:format("received ~p~n",[java:array_to_list(RcvBytes)]),
     Status = java:call(RcvSet, getStatusValue, []),
     % io:format("received status ~p~n",[Status]),
-    RcvBytes.
+    if Status == 2 ->
+        {RcvMsg, Status};
+    true -> 
+        recvOneMsg(Socket)
+    end.
 
 
 recv(Socket) ->
@@ -26,7 +30,7 @@ recv(Socket) ->
     recv(Socket).
 
 
-consumeLocally(NodeId, Socket, MsgList) ->
+send(NodeId, Socket, MsgList) ->
     Array = java:call(MsgList, toArray, []),
     % io:format("Message List: ~p~n", [java:array_to_list(Array)]),
 
@@ -50,5 +54,5 @@ runSend() ->
     MsgList = java:new(NodeId, 'java.util.ArrayList', []),
     Message1 = java:call_static(NodeId,'org.imdea.vcd.Generator', message,["Message 1"]),  
     java:call(MsgList, add, [Message1]),
-    consumeLocally(NodeId, Socket, MsgList).
+    send(NodeId, Socket, MsgList).
 
