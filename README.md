@@ -25,7 +25,5 @@ $ erl -sname loopSend
 ```
 ### Tests
 ```
-$ erl -sname tests
-> c(test).
-> test:test().
+$ erl -sname test -noshell -pa ebin -eval "test:test()" -s init stop
 ```
