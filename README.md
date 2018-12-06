@@ -25,5 +25,6 @@ $ erl -sname loopSend
 ```
 ### Tests
 ```
+$ erlc connector.erl test.erl
 $ erl -sname test -noshell -pa ebin -eval "test:test()" -s init stop
 ```
