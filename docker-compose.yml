@@ -1,0 +1,100 @@
+version: "3"
+services:
+  zk:
+    image: zookeeper
+    expose:
+      - 2181
+    networks:
+      default_ntwk:
+        ipv4_address: 10.5.0.99
+  vcd0:
+    image: kooli94/vcd:working_version
+    environment:
+      - ZK=10.5.0.99
+      - IP=10.5.0.100
+      - ID=0
+      - NODE_NUMBER=3
+      - HPORT=5000
+      - CPORT=6000
+      - POOL_SIZE=1
+    expose:
+      - 5000
+      - 6000
+    networks:
+      default_ntwk:
+        ipv4_address: 10.5.0.100
+    depends_on:
+      - zk
+  vcd1:
+    image: kooli94/vcd:working_version
+    environment:
+      - ZK=10.5.0.99
+      - IP=10.5.0.101
+      - ID=1
+      - NODE_NUMBER=3
+      - HPORT=5000
+      - CPORT=6000
+      - POOL_SIZE=1
+    expose:
+      - 5000
+      - 6000
+    networks:
+      default_ntwk:
+        ipv4_address: 10.5.0.101
+    depends_on:
+      - zk
+  vcd2:
+    image: kooli94/vcd:working_version
+    environment:
+      - ZK=10.5.0.99
+      - IP=10.5.0.102
+      - ID=2
+      - NODE_NUMBER=3
+      - HPORT=5000
+      - CPORT=6000
+      - POOL_SIZE=1
+    expose:
+      - 5000
+      - 6000
+    networks:
+      default_ntwk:
+        ipv4_address: 10.5.0.102
+    depends_on:
+      - zk
+  client0:
+    image: vitorenesduarte/vcd-java-client
+    environment:
+      - HOST=10.5.0.100
+      - PORT=6000
+      - OPS=1000
+      - CONFLICTS=true
+    networks:
+      default_ntwk:
+        ipv4_address: 10.5.0.110
+  client1:
+    image: vitorenesduarte/vcd-java-client
+    environment:
+      - HOST=10.5.0.101
+      - PORT=6000
+      - OPS=1000
+      - CONFLICTS=true
+    networks:
+      default_ntwk:
+        ipv4_address: 10.5.0.111
+  client2:
+    image: vitorenesduarte/vcd-java-client
+    environment:
+      - HOST=10.5.0.102
+      - PORT=6000
+      - OPS=1000
+      - CONFLICTS=true
+    networks:
+      default_ntwk:
+        ipv4_address: 10.5.0.112
+
+networks:
+  default_ntwk:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
