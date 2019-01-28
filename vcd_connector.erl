@@ -11,7 +11,7 @@ init() ->
     ZkIP = os:getenv("ZK", "-zk=127.0.0.1:2181"), %% default value is 127.0.0.1:2181 if ZK env var is not set, ZK should respect the format -zk=ip:port
     Conf = java:call_static(NodeId,'org.imdea.vcd.Config',parseArgs,[[ZkIP]]),
     Socket = java:call_static(NodeId,'org.imdea.vcd.Socket',create,[Conf,10]),
-    {NodeId, Socket}.
+    {ok, NodeId, Socket}.
 
 
 %% @doc This function takes a Socket as argument and
@@ -21,7 +21,7 @@ recv_one_msg(Socket) ->
     RcvSet = java:call(Socket,'receive',[]),
     RcvMsg = java:call(java:call(RcvSet,getMessagesList,[]),get,[0]),
     Status = java:call(RcvSet, getStatusValue, []),
-    {RcvMsg, Status}.
+    {ok, RcvMsg, Status}.
 
 
 %% @doc This function takes a Socket as argument and
@@ -43,7 +43,7 @@ send(NodeId, Socket, MsgList) ->
     MessageSet = java:call(MgbMsgAdded, build, []),
     java:call(Socket,send,[MessageSet]),
     SendMsg = java:call(java:call(MessageSet,getMessagesList,[]),get,[0]),
-    SendMsg.
+    {ok, SendMsg}.
 
 
 %% @doc This function runs the recv function
