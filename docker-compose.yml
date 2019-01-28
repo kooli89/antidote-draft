@@ -61,36 +61,6 @@ services:
         ipv4_address: 10.5.0.102
     depends_on:
       - zk
-  client0:
-    image: vitorenesduarte/vcd-java-client
-    environment:
-      - HOST=10.5.0.100
-      - PORT=6000
-      - OPS=1000
-      - CONFLICTS=true
-    networks:
-      default_ntwk:
-        ipv4_address: 10.5.0.110
-  client1:
-    image: vitorenesduarte/vcd-java-client
-    environment:
-      - HOST=10.5.0.101
-      - PORT=6000
-      - OPS=1000
-      - CONFLICTS=true
-    networks:
-      default_ntwk:
-        ipv4_address: 10.5.0.111
-  client2:
-    image: vitorenesduarte/vcd-java-client
-    environment:
-      - HOST=10.5.0.102
-      - PORT=6000
-      - OPS=1000
-      - CONFLICTS=true
-    networks:
-      default_ntwk:
-        ipv4_address: 10.5.0.112
 
 networks:
   default_ntwk:
