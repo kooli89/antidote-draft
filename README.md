@@ -11,6 +11,8 @@ A solution is to distribute the database over several geographic locations close
 As explained in the CAP theorem, a distributed data store that tolerate network delays and failures can’t be at the same time consistent and available. So generally, we have two main types of distributed databases, strongly consistent databases and eventually consistent databases.
 
 This is a brief comparative array of the two approaches:
+
+
 |             | Strongly consistent database | Eventually consistent databse |
 |:-----------:|:----------------------------:|:-----------------------------:|
 |   Latency   |             High             |              Low              |
