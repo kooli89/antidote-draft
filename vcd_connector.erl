@@ -27,7 +27,10 @@ recv_one_msg(Socket) ->
 %% @doc This function takes a Socket as argument and
 %% receives messages from the VCD protocol recursively
 recv(Socket) ->
-    _ = recv_one_msg(Socket),
+    Msg = recv_one_msg(Socket),
+    io:format("-------------------------~n"),
+    io:format("Message received: ~p~n", [Msg]),
+    io:format("-------------------------~n"),
     timer:sleep(1000),
     recv(Socket).
 
@@ -43,18 +46,21 @@ send(NodeId, Socket, MsgList) ->
     MessageSet = java:call(MgbMsgAdded, build, []),
     java:call(Socket,send,[MessageSet]),
     SendMsg = java:call(java:call(MessageSet,getMessagesList,[]),get,[0]),
+    io:format("-------------------------~n"),
+    io:format("Sending message: ~p~n", [SendMsg]),
+    io:format("-------------------------~n"),
     {ok, SendMsg}.
 
 
 %% @doc This function runs the recv function
 run_recv() ->
-    {_, Socket} = init(),
+    {ok, _, Socket} = init(),
     recv(Socket).
 
 
 %% @doc This function runs the send function
 run_send() ->
-    {NodeId, Socket} = init(),
+    {ok, NodeId, Socket} = init(),
     MsgList = java:new(NodeId, 'java.util.ArrayList', []),
     Message1 = java:call_static(NodeId,'org.imdea.vcd.Generator', message,["Message 1"]),  
     java:call(MsgList, add, [Message1]),

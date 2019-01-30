@@ -4,6 +4,8 @@ services:
     image: zookeeper
     expose:
       - 2181
+    ports:
+      - '2181:2181'
     networks:
       default_ntwk:
         ipv4_address: 10.5.0.99
